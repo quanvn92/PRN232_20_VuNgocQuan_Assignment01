@@ -1,0 +1,6 @@
+@_20_VuNgocQuan_Assignment01_HostAddress = http://localhost:5035
+
+GET {{_20_VuNgocQuan_Assignment01_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

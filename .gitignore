@@ -1,0 +1,22 @@
+# Build output
+**/bin/
+**/obj/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio / IDE
+.vs/
+.idea/
+.vscode/
+
+# Build logs / scratch files
+build_output.txt
+
+# OS generated files
+.DS_Store
+Thumbs.db
