@@ -25,13 +25,11 @@ public class AuthController : Controller
             return View(dto);
         }
 
-        // Store session
         HttpContext.Session.SetString("AccountID", result.AccountID.ToString());
         HttpContext.Session.SetString("AccountName", result.AccountName ?? "");
         HttpContext.Session.SetString("AccountEmail", result.AccountEmail ?? "");
         HttpContext.Session.SetString("AccountRole", result.AccountRole?.ToString() ?? "-1");
 
-        // Redirect by role: 0 = Admin, 1 = Staff, 2 = Lecturer
         return result.AccountRole switch
         {
             0 => RedirectToAction("Index", "Admin"),
