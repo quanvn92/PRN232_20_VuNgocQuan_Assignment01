@@ -1,0 +1,107 @@
+@model List<_20_VuNgocQuan_Assignment01_FrontEnd.DTOs.SystemAccountDto>
+@{ ViewData["Title"] = "Account Management"; }
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="list-group">
+            <a asp-action="Index" class="list-group-item list-group-item-action">
+                <i class="bi bi-house"></i> Dashboard
+            </a>
+            <a asp-action="Accounts" class="list-group-item list-group-item-action active">
+                <i class="bi bi-people-fill"></i> Account Management
+            </a>
+            <a asp-action="Report" class="list-group-item list-group-item-action">
+                <i class="bi bi-bar-chart-fill"></i> Statistics Report
+            </a>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-people-fill"></i> Account Management</h5>
+                <button class="btn btn-primary btn-sm"
+                        onclick="openModal('Create Account', '@Url.Action("AccountCreate")')">
+                    <i class="bi bi-plus-lg"></i> Add Account
+                </button>
+            </div>
+            <div class="card-body">
+                <!-- Search -->
+                <form method="get" class="d-flex gap-2 mb-3">
+                    <input type="text" name="keyword" value="@ViewBag.Keyword"
+                           class="form-control form-control-sm" placeholder="Search by name or email..." />
+                    <button class="btn btn-outline-secondary btn-sm" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    @if (!string.IsNullOrEmpty(ViewBag.Keyword as string))
+                    {
+                        <a asp-action="Accounts" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-x"></i>
+                        </a>
+                    }
+                </form>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th><th>Name</th><th>Email</th><th>Role</th><th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var a in Model)
+                            {
+                                <tr id="row-account-@a.AccountID">
+                                    <td><span class="badge bg-secondary">@a.AccountID</span></td>
+                                    <td>@a.AccountName</td>
+                                    <td>@a.AccountEmail</td>
+                                    <td>
+                                        @switch (a.AccountRole)
+                                        {
+                                            case 1: <span class="badge bg-success">Staff</span> break;
+                                            case 2: <span class="badge bg-info text-dark">Lecturer</span> break;
+                                            default: <span class="badge bg-secondary">Unknown</span> break;
+                                        }
+                                    </td>
+                                    <td class="text-end">
+                                        <button class="btn btn-sm btn-outline-warning"
+                                                onclick="openModal('Edit Account', '@Url.Action("AccountEdit", new { id = a.AccountID })')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger ms-1"
+                                                onclick="confirmDelete('Delete account @a.AccountName?', () => deleteAccount(@a.AccountID))">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                            @if (!Model.Any())
+                            {
+                                <tr><td colspan="5" class="text-center text-muted py-4">No accounts found.</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+function deleteAccount(id) {
+    fetch('@Url.Action("AccountDelete")', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value ?? '' },
+        body: 'id=' + id
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('row-account-' + id)?.remove();
+        } else {
+            alert('Error: ' + (data.error || 'Cannot delete this account.'));
+        }
+    });
+}
+</script>
+}

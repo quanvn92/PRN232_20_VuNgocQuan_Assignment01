@@ -1,0 +1,69 @@
+@model _20_VuNgocQuan_Assignment01_FrontEnd.DTOs.CreateNewsArticleDto
+@{
+    var categories = ViewBag.Categories as List<_20_VuNgocQuan_Assignment01_FrontEnd.DTOs.CategoryDto> ?? new();
+    var tags = ViewBag.Tags as List<_20_VuNgocQuan_Assignment01_FrontEnd.DTOs.TagDto> ?? new();
+}
+<form id="newsCreateForm" asp-action="NewsArticleCreate" asp-controller="Staff" method="post">
+    @Html.AntiForgeryToken()
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="NewsArticleID" class="form-label">Article ID <span class="text-danger">*</span></label>
+            <input asp-for="NewsArticleID" class="form-control" placeholder="e.g. NEWS001" maxlength="20" />
+            <span asp-validation-for="NewsArticleID" class="text-danger small"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="CategoryID" class="form-label">Category</label>
+            <select asp-for="CategoryID" class="form-select">
+                <option value="">— Select Category —</option>
+                @foreach (var c in categories)
+                {
+                    <option value="@c.CategoryID">@c.CategoryName</option>
+                }
+            </select>
+        </div>
+        <div class="col-12">
+            <label asp-for="NewsTitle" class="form-label">Title</label>
+            <input asp-for="NewsTitle" class="form-control" placeholder="Enter article title" />
+        </div>
+        <div class="col-12">
+            <label asp-for="Headline" class="form-label">Headline <span class="text-danger">*</span></label>
+            <input asp-for="Headline" class="form-control" placeholder="Enter headline" maxlength="150" />
+            <span asp-validation-for="Headline" class="text-danger small"></span>
+        </div>
+        <div class="col-12">
+            <label asp-for="NewsContent" class="form-label">Content</label>
+            <textarea asp-for="NewsContent" class="form-control" rows="5" placeholder="Enter news content"></textarea>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="NewsSource" class="form-label">Source</label>
+            <input asp-for="NewsSource" class="form-control" placeholder="e.g. Internet, N/A" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="NewsStatus" class="form-label">Status</label>
+            <select asp-for="NewsStatus" class="form-select">
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select>
+        </div>
+        <div class="col-12">
+            <label class="form-label">Tags</label>
+            <div class="d-flex flex-wrap gap-2 p-2 border rounded">
+                @foreach (var t in tags)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="TagIds" value="@t.TagID" id="tag-c-@t.TagID" />
+                        <label class="form-check-label badge bg-secondary rounded-pill" for="tag-c-@t.TagID">
+                            @t.TagName
+                        </label>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end gap-2 mt-4">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success" onclick="submitModalForm('newsCreateForm')">
+            <i class="bi bi-plus-lg"></i> Create Article
+        </button>
+    </div>
+</form>

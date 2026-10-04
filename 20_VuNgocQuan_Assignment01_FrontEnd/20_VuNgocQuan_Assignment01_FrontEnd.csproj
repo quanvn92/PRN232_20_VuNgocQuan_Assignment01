@@ -4,11 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>_20_VugNgocQuan_Assignment01_FrontEnd</RootNamespace>
+    <RootNamespace>_20_VuNgocQuan_Assignment01_FrontEnd</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.3.0" />
   </ItemGroup>
 
 </Project>

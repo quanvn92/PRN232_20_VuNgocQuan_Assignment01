@@ -1,0 +1,105 @@
+@model List<_20_VuNgocQuan_Assignment01_FrontEnd.DTOs.NewsArticleDto>
+@{ ViewData["Title"] = "News Article Management"; }
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="list-group">
+            <a asp-action="Index" class="list-group-item list-group-item-action"><i class="bi bi-house"></i> Dashboard</a>
+            <a asp-action="Categories" class="list-group-item list-group-item-action"><i class="bi bi-folder2-open"></i> Categories</a>
+            <a asp-action="NewsArticles" class="list-group-item list-group-item-action active"><i class="bi bi-newspaper"></i> News Articles</a>
+            <a asp-action="NewsHistory" class="list-group-item list-group-item-action"><i class="bi bi-clock-history"></i> My News History</a>
+            <a asp-action="Profile" class="list-group-item list-group-item-action"><i class="bi bi-person-gear"></i> My Profile</a>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-newspaper"></i> News Article Management</h5>
+                <button class="btn btn-success btn-sm"
+                        onclick="openModal('Create News Article', '@Url.Action("NewsArticleCreate")')">
+                    <i class="bi bi-plus-lg"></i> Add Article
+                </button>
+            </div>
+            <div class="card-body">
+                <form method="get" class="d-flex gap-2 mb-3">
+                    <input type="text" name="keyword" value="@ViewBag.Keyword"
+                           class="form-control form-control-sm" placeholder="Search by title, headline, content..." />
+                    <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-search"></i></button>
+                    @if (!string.IsNullOrEmpty(ViewBag.Keyword as string))
+                    {
+                        <a asp-action="NewsArticles" class="btn btn-outline-danger btn-sm"><i class="bi bi-x"></i></a>
+                    }
+                </form>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th><th>Title</th><th>Category</th>
+                                <th>Tags</th><th>Status</th><th>Created</th><th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var a in Model)
+                            {
+                                <tr id="row-news-@a.NewsArticleID">
+                                    <td><code>@a.NewsArticleID</code></td>
+                                    <td class="fw-semibold" style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                                        @a.NewsTitle
+                                    </td>
+                                    <td><span class="badge bg-primary">@a.CategoryName</span></td>
+                                    <td>
+                                        @foreach (var t in a.Tags.Take(2))
+                                        {
+                                            <span class="badge bg-secondary rounded-pill me-1">@t.TagName</span>
+                                        }
+                                        @if (a.Tags.Count > 2)
+                                        { <span class="text-muted small">+@(a.Tags.Count - 2)</span> }
+                                    </td>
+                                    <td>
+                                        @if (a.NewsStatus == true)
+                                        { <span class="badge bg-success">Active</span> }
+                                        else
+                                        { <span class="badge bg-secondary">Inactive</span> }
+                                    </td>
+                                    <td class="small text-muted">@a.CreatedDate?.ToString("yyyy-MM-dd")</td>
+                                    <td class="text-end">
+                                        <button class="btn btn-sm btn-outline-warning"
+                                                onclick="openModal('Edit News Article', '@Url.Action("NewsArticleEdit", new { id = a.NewsArticleID })')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger ms-1"
+                                                onclick="confirmDelete('Delete article: @a.NewsTitle?', () => deleteNews('@a.NewsArticleID'))">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                            @if (!Model.Any())
+                            {
+                                <tr><td colspan="7" class="text-center text-muted py-4">No articles found.</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+function deleteNews(id) {
+    fetch('@Url.Action("NewsArticleDelete")', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'id=' + encodeURIComponent(id)
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) document.getElementById('row-news-' + id)?.remove();
+        else alert('Error: ' + (data.error || 'Cannot delete this article.'));
+    });
+}
+</script>
+}

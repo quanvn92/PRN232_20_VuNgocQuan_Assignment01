@@ -1,0 +1,55 @@
+@model _20_VuNgocQuan_Assignment01_FrontEnd.DTOs.SystemAccountDto
+@{ ViewData["Title"] = "My Profile"; }
+
+<div class="row mt-4 justify-content-center">
+    <div class="col-md-7">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                @TempData["Success"] <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show">
+                @TempData["Error"] <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-person-gear"></i> My Profile</h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="ProfileUpdate" asp-controller="Staff" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Account ID</label>
+                        <input type="text" class="form-control" value="@Model.AccountID" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Full Name</label>
+                        <input type="text" name="AccountName" class="form-control" value="@Model.AccountName" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email Address</label>
+                        <input type="email" name="AccountEmail" class="form-control" value="@Model.AccountEmail" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Role</label>
+                        <input type="text" class="form-control" value="@(Model.AccountRole == 1 ? "Staff" : "Lecturer")" readonly />
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">New Password <small class="text-muted">(leave blank to keep current)</small></label>
+                        <input type="password" name="AccountPassword" class="form-control" placeholder="••••••••" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-save"></i> Save Changes
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
