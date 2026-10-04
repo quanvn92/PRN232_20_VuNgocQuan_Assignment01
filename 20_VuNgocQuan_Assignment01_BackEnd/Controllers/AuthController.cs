@@ -27,7 +27,6 @@ public class AuthController : ControllerBase
         if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
             return BadRequest("Email and password are required.");
 
-        // Check admin account from appsettings
         var adminEmail = _configuration["AdminAccount:Email"];
         var adminPassword = _configuration["AdminAccount:Password"];
 
@@ -43,7 +42,6 @@ public class AuthController : ControllerBase
             });
         }
 
-        // Check DB accounts
         var account = await _accountRepo.GetByEmailAsync(request.Email);
         if (account == null || account.AccountPassword != request.Password)
             return Unauthorized("Invalid email or password.");
