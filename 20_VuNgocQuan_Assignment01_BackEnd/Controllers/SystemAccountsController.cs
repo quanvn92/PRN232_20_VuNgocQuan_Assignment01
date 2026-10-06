@@ -18,7 +18,6 @@ public class SystemAccountsController : ODataController
         _repo = repo;
     }
 
-    /// <summary>Get all accounts (Admin only)</summary>
     [HttpGet]
     [EnableQuery]
     public async Task<ActionResult<IEnumerable<SystemAccountDto>>> GetAll([FromQuery] string? keyword = null)
@@ -36,18 +35,15 @@ public class SystemAccountsController : ODataController
         return Ok(MapToDto(account));
     }
 
-    /// <summary>Create account (Admin only)</summary>
     [HttpPost]
     public async Task<ActionResult<SystemAccountDto>> Create([FromBody] CreateSystemAccountDto dto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        // Check if ID already exists
         var existing = await _repo.GetByIdAsync(dto.AccountID);
         if (existing != null)
             return Conflict($"Account with ID {dto.AccountID} already exists.");
 
-        // Check if email already exists
         var byEmail = await _repo.GetByEmailAsync(dto.AccountEmail);
         if (byEmail != null)
             return Conflict("An account with this email already exists.");
@@ -67,7 +63,6 @@ public class SystemAccountsController : ODataController
         return CreatedAtAction(nameof(GetById), new { id = account.AccountID }, MapToDto(account));
     }
 
-    /// <summary>Update account (Admin only)</summary>
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(short id, [FromBody] UpdateSystemAccountDto dto)
     {
@@ -87,7 +82,6 @@ public class SystemAccountsController : ODataController
         return NoContent();
     }
 
-    /// <summary>Delete account (Admin only). Fails if account has created any articles.</summary>
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(short id)
     {

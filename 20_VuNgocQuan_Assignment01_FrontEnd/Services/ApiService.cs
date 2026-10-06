@@ -12,7 +12,6 @@ public class ApiService
         _http = factory.CreateClient("API");
     }
 
-    // ── Auth ─────────────────────────────────────────────────────────────
     public async Task<LoginResponseDto?> LoginAsync(LoginRequestDto dto)
     {
         try
@@ -25,7 +24,6 @@ public class ApiService
         return null;
     }
 
-    // ── SystemAccounts ───────────────────────────────────────────────────
     public async Task<List<SystemAccountDto>> GetAccountsAsync(string? keyword = null)
     {
         try
@@ -83,7 +81,6 @@ public class ApiService
         catch (Exception ex) { return (false, ex.Message); }
     }
 
-    // ── Categories ───────────────────────────────────────────────────────
     public async Task<List<CategoryDto>> GetCategoriesAsync(string? keyword = null)
     {
         try
@@ -150,7 +147,6 @@ public class ApiService
         catch (Exception ex) { return (false, ex.Message); }
     }
 
-    // ── Tags ─────────────────────────────────────────────────────────────
     public async Task<List<TagDto>> GetTagsAsync()
     {
         try
@@ -160,7 +156,6 @@ public class ApiService
         catch { return new(); }
     }
 
-    // ── NewsArticles ─────────────────────────────────────────────────────
     public async Task<List<NewsArticleDto>> GetNewsArticlesAsync(string? keyword = null)
     {
         try

@@ -18,7 +18,6 @@ public class CategoriesController : ODataController
         _repo = repo;
     }
 
-    /// <summary>Get all categories with optional keyword search</summary>
     [HttpGet]
     [EnableQuery]
     public async Task<ActionResult<IEnumerable<CategoryDto>>> GetAll([FromQuery] string? keyword = null)
@@ -27,7 +26,6 @@ public class CategoriesController : ODataController
         return Ok(categories.Select(MapToDto));
     }
 
-    /// <summary>Get only active categories</summary>
     [HttpGet("active")]
     public async Task<ActionResult<IEnumerable<CategoryDto>>> GetActive()
     {
@@ -35,7 +33,6 @@ public class CategoriesController : ODataController
         return Ok(categories.Select(MapToDto));
     }
 
-    /// <summary>Get category by ID</summary>
     [HttpGet("{id}")]
     public async Task<ActionResult<CategoryDto>> GetById(short id)
     {
@@ -44,7 +41,6 @@ public class CategoriesController : ODataController
         return Ok(MapToDto(category));
     }
 
-    /// <summary>Create category (Staff only)</summary>
     [HttpPost]
     public async Task<ActionResult<CategoryDto>> Create([FromBody] CreateCategoryDto dto)
     {
@@ -64,7 +60,6 @@ public class CategoriesController : ODataController
         return CreatedAtAction(nameof(GetById), new { id = category.CategoryID }, MapToDto(category));
     }
 
-    /// <summary>Update category (Staff only)</summary>
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(short id, [FromBody] UpdateCategoryDto dto)
     {
@@ -84,7 +79,6 @@ public class CategoriesController : ODataController
         return NoContent();
     }
 
-    /// <summary>Delete category. Fails if any news article references it.</summary>
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(short id)
     {

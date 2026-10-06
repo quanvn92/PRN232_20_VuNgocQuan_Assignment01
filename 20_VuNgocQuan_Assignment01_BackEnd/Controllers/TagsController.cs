@@ -17,7 +17,6 @@ public class TagsController : ODataController
         _repo = repo;
     }
 
-    /// <summary>Get all tags</summary>
     [HttpGet]
     [EnableQuery]
     public async Task<ActionResult<IEnumerable<TagDto>>> GetAll()
@@ -31,7 +30,6 @@ public class TagsController : ODataController
         }));
     }
 
-    /// <summary>Get tag by ID</summary>
     [HttpGet("{id}")]
     public async Task<ActionResult<TagDto>> GetById(int id)
     {

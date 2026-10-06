@@ -19,14 +19,12 @@ public class AdminController : Controller
         return null!;
     }
 
-    // ── Dashboard ──────────────────────────────────────────────────────
     public IActionResult Index()
     {
         var guard = RequireAdmin(); if (guard != null) return guard;
         return View();
     }
 
-    // ── Accounts ───────────────────────────────────────────────────────
     public async Task<IActionResult> Accounts(string? keyword)
     {
         var guard = RequireAdmin(); if (guard != null) return guard;
@@ -102,7 +100,6 @@ public class AdminController : Controller
         return Json(new { success = ok, error = err });
     }
 
-    // ── Report ─────────────────────────────────────────────────────────
     public IActionResult Report()
     {
         var guard = RequireAdmin(); if (guard != null) return guard;

@@ -22,14 +22,12 @@ public class StaffController : Controller
     private short CurrentAccountId()
         => short.TryParse(HttpContext.Session.GetString("AccountID"), out var id) ? id : (short)0;
 
-    // ── Dashboard ──────────────────────────────────────────────────────
     public IActionResult Index()
     {
         var guard = RequireStaff(); if (guard != null) return guard;
         return View();
     }
 
-    // ── Profile ────────────────────────────────────────────────────────
     public async Task<IActionResult> Profile()
     {
         var guard = RequireStaff(); if (guard != null) return guard;
@@ -50,14 +48,12 @@ public class StaffController : Controller
         else
         {
             TempData["Success"] = "Profile updated successfully.";
-            // Update session name
             if (!string.IsNullOrEmpty(dto.AccountName))
                 HttpContext.Session.SetString("AccountName", dto.AccountName);
         }
         return RedirectToAction("Profile");
     }
 
-    // ── News History ───────────────────────────────────────────────────
     public async Task<IActionResult> NewsHistory()
     {
         var guard = RequireStaff(); if (guard != null) return guard;
@@ -65,7 +61,6 @@ public class StaffController : Controller
         return View(articles);
     }
 
-    // ── Categories ────────────────────────────────────────────────────
     public async Task<IActionResult> Categories(string? keyword)
     {
         var guard = RequireStaff(); if (guard != null) return guard;
@@ -148,7 +143,6 @@ public class StaffController : Controller
         return Json(new { success = ok, error = err });
     }
 
-    // ── News Articles ─────────────────────────────────────────────────
     public async Task<IActionResult> NewsArticles(string? keyword)
     {
         var guard = RequireStaff(); if (guard != null) return guard;

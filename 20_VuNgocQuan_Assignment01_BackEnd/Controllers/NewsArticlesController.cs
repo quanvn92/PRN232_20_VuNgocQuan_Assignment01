@@ -18,7 +18,6 @@ public class NewsArticlesController : ODataController
         _repo = repo;
     }
 
-    /// <summary>Get all news articles with optional keyword search (public can view active only)</summary>
     [HttpGet]
     [EnableQuery]
     public async Task<ActionResult<IEnumerable<NewsArticleDto>>> GetAll([FromQuery] string? keyword = null)
@@ -34,7 +33,6 @@ public class NewsArticlesController : ODataController
         }
     }
 
-    /// <summary>Get only active news articles (public access)</summary>
     [HttpGet("active")]
     public async Task<ActionResult<IEnumerable<NewsArticleDto>>> GetActive()
     {
@@ -49,7 +47,6 @@ public class NewsArticlesController : ODataController
         }
     }
 
-    /// <summary>Get news articles by creator account ID (Staff history)</summary>
     [HttpGet("by-creator/{accountId}")]
     public async Task<ActionResult<IEnumerable<NewsArticleDto>>> GetByCreator(short accountId)
     {
@@ -64,7 +61,6 @@ public class NewsArticlesController : ODataController
         }
     }
 
-    /// <summary>Get news articles by date range for Admin report</summary>
     [HttpGet("report")]
     public async Task<ActionResult<IEnumerable<NewsArticleDto>>> GetReport(
         [FromQuery] DateTime startDate,
@@ -84,7 +80,6 @@ public class NewsArticlesController : ODataController
         }
     }
 
-    /// <summary>Get news article by ID</summary>
     [HttpGet("{id}")]
     public async Task<ActionResult<NewsArticleDto>> GetById(string id)
     {
@@ -100,7 +95,6 @@ public class NewsArticlesController : ODataController
         }
     }
 
-    /// <summary>Create news article (Staff only)</summary>
     [HttpPost]
     public async Task<ActionResult<NewsArticleDto>> Create([FromBody] CreateNewsArticleDto dto)
     {
@@ -111,7 +105,6 @@ public class NewsArticlesController : ODataController
 
         try
         {
-            // Check duplicate ID
             var existing = await _repo.GetByIdAsync(dto.NewsArticleID);
             if (existing != null)
                 return Conflict($"News article with ID '{dto.NewsArticleID}' already exists.");
@@ -134,7 +127,6 @@ public class NewsArticlesController : ODataController
             await _repo.AddAsync(article);
             await _repo.SaveAsync();
 
-            // Add tags
             if (dto.TagIds.Any())
             {
                 await _repo.UpdateTagsAsync(article.NewsArticleID, dto.TagIds);
@@ -150,7 +142,6 @@ public class NewsArticlesController : ODataController
         }
     }
 
-    /// <summary>Update news article (Staff only)</summary>
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(string id, [FromBody] UpdateNewsArticleDto dto)
     {
@@ -172,7 +163,6 @@ public class NewsArticlesController : ODataController
 
             await _repo.UpdateAsync(article);
 
-            // Update tags if provided
             if (dto.TagIds != null)
             {
                 await _repo.UpdateTagsAsync(id, dto.TagIds);
@@ -188,7 +178,6 @@ public class NewsArticlesController : ODataController
         }
     }
 
-    /// <summary>Delete news article (Staff only)</summary>
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {

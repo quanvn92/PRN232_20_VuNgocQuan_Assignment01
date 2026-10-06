@@ -9,14 +9,12 @@ public class HomeController : Controller
 
     public HomeController(ApiService api) => _api = api;
 
-    // Public: show all active news articles
     public async Task<IActionResult> Index()
     {
         var news = await _api.GetActiveNewsAsync();
         return View(news);
     }
 
-    // Public: view single news article detail
     public async Task<IActionResult> Detail(string id)
     {
         var article = await _api.GetNewsArticleAsync(id);
